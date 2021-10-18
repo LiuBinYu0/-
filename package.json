@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev":"gulp dev"
+    "dev": "gulp dev"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +14,8 @@
     "gulp": "^4.0.2",
     "gulp-clean": "^0.4.0",
     "gulp-file-include": "^2.3.0",
-    "gulp-webserver": "^0.9.1"
+    "gulp-sass": "^5.0.0",
+    "gulp-webserver": "^0.9.1",
+    "sass": "^1.43.2"
   }
 }

@@ -2,6 +2,7 @@ let { series, parallel, src, dest, watch } = require('gulp');
 let fileInclude = require('gulp-file-include');
 let clean = require('gulp-clean');
 let webserver = require('gulp-webserver');
+let sass = require('gulp-sass')(require('sass'));
 
 
 
@@ -38,6 +39,7 @@ function watchTask(){
     watch('./src/static/**',staticTask);
     watch('./src/lib/**',libTask);
     watch('./src/api/**',apiTask);
+    watch('./src/css/**',sassTask );
 }
 
 // 同步静态资源
@@ -58,7 +60,13 @@ function apiTask(){
             .pipe(dest('./dist/api'));
 }
 
+// sass的任务
+function sassTask(){
+    return src('./src/css/*.scss')
+            .pipe(sass())
+            .pipe(dest('./dist/css'))
+}
 // 对外接口
 module.exports = {
-    dev:series(cleanTask,parallel(fileIncludeTask,staticTask, libTask, apiTask), parallel(webTask,watchTask) )
+    dev:series(cleanTask,parallel(fileIncludeTask,staticTask, libTask, apiTask, sassTask), parallel(webTask,watchTask) )
 };
