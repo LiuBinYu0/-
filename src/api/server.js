@@ -12,8 +12,14 @@ define(['jquery'],function($){
         return $.ajax('/api/mock/banner2.json');
     }
 
+    //  获取商品列表
+    function getGoodsData(type){
+        return $.ajax(`/api/mock/${type}.json`);
+    }
+
     return{
         getBannerData,
-        getBanner2Data
+        getBanner2Data,
+        getGoodsData
     };
 });
