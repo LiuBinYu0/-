@@ -68,8 +68,58 @@ define(['jquery', '/api/server.js', '/js/modules/banner.js'], function($, { getB
             }
         `);
 
-      
+        bindGallery();
     }
 
+    // 完成放大镜功能
+    function bindGallery(){
+        $detail_gallery.on('mouseover','.detail_gallery_normal',function(){
+            let $span = $(this).find('span');
+            let $big = $(this).next();
+            $span.show();
+            $big.show();
+        });
+
+        $detail_gallery.on('mouseout','.detail_gallery_normal',function(){
+            let $span = $(this).find('span');
+            let $big = $(this).next();
+
+            $span.hide();
+            $big.hide();
+
+        });
+
+        $detail_gallery.on('mousemove','.detail_gallery_normal',function(ev){
+            let $span = $(this).find('span'); 
+            let $big = $(this).next();
+            let L =  ev.pageX - $(this).offset().left - $span.width()/2; 
+            let T = ev.pageY - $(this).offset().top - $span.height()/2;
+             if(L<0){
+                L = 0;
+             }
+             else if(L>$(this).width() - $span.width()){
+                 L = $(this).width() - $span.width();
+             }
+             if(T<0){
+                T = 0;
+             }
+             else if(T>$(this).height() - $span.height()){
+                 T = $(this).height() - $span.height();
+             }
+            $span.css({
+                left: L,
+                top: T
+            });
+
+            let scaleX = L/($(this).width() - $span.width());
+            let scaleY = T/($(this).height() - $span.height());
+
+            $big.children().css({
+                left: - scaleX * ($big.children().width() - $big.width()),
+                top: - scaleY *  ($big.children().height() - $big.height())
+            })
+
+        });      
+    }
      
-});
+}); 
