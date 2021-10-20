@@ -37,7 +37,7 @@ define(['jquery','/api/server.js','/js/modules/banner.js'],function($, {getBanne
                 data.goods_list.map((v,i)=>{
                     return `
                         <li>
-                            <a href="/views/detail.html" target="_blank">
+                            <a href="/views/detail.html?goodsId=${v.goodsId}&type=${data.type}" target="_blank">
                                 <div><img src="${v.goodsImg}" alt=""></div>
                                 <h3>${v.goodsName}</h3>
                                 <p>${v.goodsPrice}</p>
