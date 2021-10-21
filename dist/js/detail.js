@@ -6,7 +6,7 @@ requirejs.config({
     } 
 });
 
-define(['jquery', '/api/server.js', '/js/modules/banner.js'], function($, { getBanner2Data, getDetailData }, initBanner){
+define(['jquery', '/api/server.js', '/js/modules/banner.js','/js/modules/cartStorage.js'], function($, { getBanner2Data, getDetailData }, initBanner,{addCartStorage}){
 
      //console.log($);
 
@@ -48,16 +48,16 @@ define(['jquery', '/api/server.js', '/js/modules/banner.js'], function($, { getB
                 ${ data.chooseColor.map((v)=>{
                     return `<span class="detail_message_box">${v}</span>`;
                 }).join('') }
-            </p>
-            <div class="detail_message_btn clearfix">
-                <div class="detail_message_num l">
-                    <input type="text" value="1">
-                    <span>+</span>
-                    <span>-</span>
+                </p>
+                <div class="detail_message_btn clearfix">
+                    <div class="detail_message_num l">
+                        <input class="detail_message_number" type="text" value="1">
+                        <span class="detail_message_addbtn">+</span>
+                        <span class="detail_message_removebtn">-</span>
+                    </div>
+                    <div class="detail_message_cart l"><a href="javascript:;">加入购物车</a></div>
+                    <div class="detail_message_computed l"><a href="/views/cart.html">立即下单</a></div>
                 </div>
-                <div class="detail_message_cart l"><a href="#">加入购物车</a></div>
-                <div class="detail_message_computed l"><a href="#">立即下单</a></div>
-            </div>
         `);
         $detailGoods.html(`
             <h3>-- 商品详情 --</h3>
@@ -69,6 +69,7 @@ define(['jquery', '/api/server.js', '/js/modules/banner.js'], function($, { getB
         `);
 
         bindGallery();
+        bindMessage(data);
     }
 
     // 完成放大镜功能
@@ -120,6 +121,57 @@ define(['jquery', '/api/server.js', '/js/modules/banner.js'], function($, { getB
             })
 
         });      
+    }
+
+    // 完成商品的详情功能
+    function bindMessage(data){
+        
+        let nowColor;
+        
+
+         $detail_message.on('click','.detail_message_box',function(){
+
+            $(this).addClass('active').siblings().removeClass('active');
+            nowColor = $(this).html();
+
+         });
+
+         let $detail_message_number = $detail_message.find('.detail_message_number');  
+         $detail_message.on('click','.detail_message_addbtn',function(){
+            let newNumber = Number($detail_message_number.val()) + 1;
+            $detail_message_number.val(newNumber);
+         });
+
+         $detail_message.on('click','.detail_message_removebtn',function(){
+            let newNumber = Number($detail_message_number.val()) - 1;
+            if(newNumber>0){
+                $detail_message_number.val(newNumber);
+            }
+            
+         });
+
+         $detail_message_number.on('input',function(){
+            //  不能为空，并且非数字，这样就会触发if
+             if($(this).val() !== '' && !Number($(this).val())){
+                 $(this).val(1);
+             }
+         });
+
+         $detail_message.on('click','.detail_message_cart',function(){
+            console.log(111)
+            let nowData = {
+                goodsName:data.goodsName ,
+                goodsColor:nowColor ,
+                goodsPrice:data.goodsPrice,
+                goodsNumber:Number($detail_message_number.val()) ,
+                isChecked:true,
+            };
+
+            addCartStorage(nowData, function(){
+                alert('添加购物车成功')
+            });
+
+         });
     }
      
 }); 
